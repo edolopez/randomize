@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title></title>
+
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
+
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="lib/ionic-service-core/ionic-core.js"></script>
+    <script src="lib/ionic-service-deploy/ionic-deploy.js"></script>
+    <script src="lib/ngCordova/dist/ng-cordova.js"></script>
+    <script src="cordova.js"></script>
+
+    <!-- your app's js -->
+    <script src="js/app.js"></script>
+  </head>
+  <body ng-app="starter" ng-controller="VenueCtrl">
+
+    <ion-pane>
+      <!-- Header -->
+      <ion-header-bar class="bar bar-header bar-dark">
+        <h1 class="title">Randomize</h1>
+      </ion-header-bar>
+
+      <ion-content>
+
+        <div class="welcome-message">
+          Welcome to Randomize! A simple app that helps you find a random place close to you depending on the taste you have right now.
+        </div>
+
+        <!-- Radius for current location -->
+        <div class="list">
+          <div class="item range range-positive item-range">
+            <i class="icon ion-pinpoint"></i>
+            <input type="range" name="volume" min="500" max="10000" value="500" ng-model="radius.distance">
+            <i class="icon ion-ionic"></i>
+            {{ (radius.distance / 1000).toFixed(1) }} kms
+          </div>
+        </div>
+
+
+        <!-- our list and list items -->
+        <ion-list>
+          <ion-item ng-repeat="category in categories">
+            <label class="item-radio">
+              <input type="radio" name="group" value="{{category.id}}" ng-click="chooseCategory(category.id)">
+              <div class="button button-block item-content">
+                <div class="category-name">{{category.title}}</div>
+              </div>
+              <i class="radio-icon ion-checkmark"></i>
+            </label>
+          </ion-item>
+        </ion-list>
+
+        <!-- Button to activate search on Foursqare API -->
+        <button ng-click="openModal()" class="button button-block button-positive">
+          Randomize!
+        </button>
+
+      </ion-content>
+    </ion-pane>
+
+    <script id="my-modal.html" type="text/ng-template">
+      <ion-modal-view>
+        <ion-header-bar>
+          <h1 class="title">Place to go!</h1>
+          <div class="button button-clear" ng-click="closeModal()"><span class="icon ion-close"></span></div>
+        </ion-header-bar>
+        <ion-content>
+          <div ng-if="loading">
+            <div class="spinner">
+              <div class="bounce1"></div>
+              <div class="bounce2"></div>
+              <div class="bounce3"></div>
+            </div>
+          </div> 
+          <div ng-if="!loading">
+            <div ng-if="venue.id != ''">
+              <div>{{venue.name}}</div>
+              <div>{{venue.address}}</div>
+              <div>{{venue.checkinsCount}}</div>
+            </div>  
+            <div ng-if="venue.id === ''">
+              <div>Lo sentimos, no hay lugar.</div>
+            </div>  
+          </div>
+        </ion-content>
+      </ion-modal-view>
+    </script>
+
+  </body>
+</html>
